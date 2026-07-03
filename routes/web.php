@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Главная страница с формой сокращения ссылок
+// Редирект на страницу входа
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 })->name('home');
 
 // Создание короткой ссылки (AJAX и обычный POST)
