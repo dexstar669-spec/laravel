@@ -1,66 +1,130 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Linker — Сервис сокращения ссылок
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Веб-приложение на **Laravel 10**, **FilamentPHP v3**, **Laravel Breeze**, **Tailwind CSS** и **jQuery** для сокращения URL с отслеживанием статистики переходов.
 
-## About Laravel
+## Возможности
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Сокращение ссылок (6-символьный код: буквы + цифры)
+- Регистрация, вход и выход (Laravel Breeze)
+- AJAX-форма на главной странице (jQuery)
+- Личный кабинет `/admin` (FilamentPHP v3)
+- Статистика переходов: IP, User Agent, дата/время
+- Защита CSRF, валидация URL, Eloquent ORM
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Требования
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.1+
+- Composer
+- Node.js 18+ и npm
+- MySQL / MariaDB
+- Apache с mod_rewrite (или `php artisan serve`)
 
-## Learning Laravel
+## Установка
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Клонирование репозитория
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+git clone <url-репозитория> linker
+cd linker
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. Установка зависимостей
 
-## Laravel Sponsors
+```bash
+composer install
+npm install
+npm run build
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+> На Windows с XAMPP используйте: `C:\xampp\php\php.exe composer.phar install`
 
-### Premium Partners
+### 3. Настройка `.env`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Contributing
+Отредактируйте `.env`:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```env
+APP_NAME=Linker
+APP_URL=http://linker.local
 
-## Code of Conduct
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=linker
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Создание базы данных
 
-## Security Vulnerabilities
+В phpMyAdmin или MySQL CLI:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```sql
+CREATE DATABASE linker CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
-## License
+### 5. Миграции
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan migrate
+```
+
+### 6. Создание пользователя Filament
+
+Зарегистрируйтесь через `/register` или создайте пользователя:
+
+```bash
+php artisan make:filament-user
+```
+
+### 7. Запуск сервера разработки
+
+```bash
+php artisan serve
+```
+
+Откройте: http://127.0.0.1:8000
+
+### 8. Настройка Apache (опционально)
+
+1. Добавьте в `C:\Windows\System32\drivers\etc\hosts`:
+   ```
+   127.0.0.1 linker.local
+   ```
+
+2. Подключите виртуальный хост из `apache/linker-vhost.conf` в `httpd-vhosts.conf`
+
+3. Перезапустите Apache
+
+4. Откройте: http://linker.local
+
+## Маршруты
+
+| Метод  | URL                    | Описание                    |
+|--------|------------------------|-----------------------------|
+| GET    | `/`                    | Главная страница            |
+| POST   | `/shorten`             | Создание короткой ссылки    |
+| GET    | `/{shortCode}`         | Редирект (6 символов)       |
+| GET    | `/admin`               | Личный кабинет (Filament)   |
+| GET    | `/api/user/urls`       | Список ссылок (auth)        |
+| GET    | `/api/url/{id}/stats`  | Статистика (auth)           |
+| DELETE | `/api/url/{id}`        | Удаление (auth)             |
+
+## Структура проекта
+
+```
+app/
+├── Filament/Resources/ShortUrlResource.php
+├── Http/Controllers/UrlController.php
+├── Models/ShortUrl.php, Click.php, User.php
+├── Providers/Filament/AdminPanelProvider.php
+└── Services/UrlShortener.php
+```
+
+## Лицензия
+
+MIT

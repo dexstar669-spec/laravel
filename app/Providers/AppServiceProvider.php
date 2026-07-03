@@ -2,16 +2,17 @@
 
 namespace App\Providers;
 
+use App\Services\UrlShortener;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Регистрация сервисов приложения.
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(UrlShortener::class);
     }
 
     /**
